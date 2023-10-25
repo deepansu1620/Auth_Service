@@ -2,6 +2,7 @@ const express = require("express");
 const { PORT } = require("./config/serverConfig");
 const bodyParser = require("body-parser");
 const apiRoutes = require("./routes/index");
+const db = require('./models/index');
 
 //const UserService = require("./services/user-service");
 
@@ -13,6 +14,11 @@ const prepareAndStartServer = () => {
   app.use("/api", apiRoutes);
   app.listen(3001, async () => {
     console.log(`server started on Port : ${PORT}`);
+    if(process.env.DB_SYNC){
+      db.sequelize.sync({alter:true});
+    }
+
+    
 
     // const service = new UserService();
     // const newToken = service.createToken({ email: "sanket@admin.com", id: 1 });
